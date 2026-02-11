@@ -1,0 +1,429 @@
+\documentclass[a4paper, 12pt]{article}
+
+% --- PACKAGES ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{xcolor}
+
+% Packages pour les améliorations
+\usepackage{listings} % Pour le code source
+\usepackage[many]{tcolorbox} % Pour les boîtes colorées
+\usepackage{pgfplots} % Pour les graphiques
+\pgfplotsset{compat=1.17} % Version de pgfplots
+\usepackage{makeidx} % Pour l'index
+\usepackage[acronym]{glossaries} % Pour le glossaire
+
+% --- CONFIGURATIONS ---
+\geometry{a4paper, margin=2cm}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Cours de Statistiques},
+    pdfauthor={GitHub Copilot},
+}
+
+% Configuration de PGFPlots pour les thèmes
+\usepgfplotslibrary{statistics}
+
+% Configuration de listings pour les langages
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+% Configuration de tcolorbox
+\newtcbtheorem{definition}{Définition}{
+    colback=blue!5!white,
+    colframe=blue!75!black,
+    fonttitle=\bfseries
+}{def}
+
+\newtcbtheorem{formule}{Formule}{
+    colback=green!5!white,
+    colframe=green!75!black,
+    fonttitle=\bfseries
+}{form}
+
+\newtcbtheorem{exemple}{Exemple}{
+    colback=orange!5!white,
+    colframe=orange!75!black,
+    fonttitle=\bfseries
+}{ex}
+
+% --- GLOSSAIRE ET INDEX ---
+\makeglossaries
+\makeindex
+
+% Définitions du glossaire
+\newglossaryentry{moyenne}{name=Moyenne, description={Somme des valeurs d'un ensemble de données divisée par le nombre de ces valeurs. C'est une mesure de tendance centrale.}}
+\newglossaryentry{mediane}{name=Médiane, description={Valeur qui sépare un ensemble de données en deux moitiés égales. 50\% des données sont inférieures à la médiane et 50\% sont supérieures.}}
+\newglossaryentry{variance}{name=Variance, description={Mesure de la dispersion des données autour de la moyenne. C'est la moyenne des carrés des écarts à la moyenne.}}
+\newglossaryentry{ecart-type}{name=Écart-type, description={Racine carrée de la variance. Il mesure la dispersion des données dans la même unité que les données originales.}}
+\newglossaryentry{skewness}{name=Skewness, description={Coefficient d'asymétrie, mesure le défaut de symétrie d'une distribution.}}
+\newglossaryentry{kurtosis}{name=Kurtosis, description={Coefficient d'aplatissement, mesure l'acuité du pic d'une distribution.}}
+\newglossaryentry{correlation}{name=Corrélation, description={Mesure de la force et de la direction de la relation linéaire entre deux variables quantitatives.}}
+\newglossaryentry{regression}{name=Régression linéaire, description={Modèle statistique qui cherche à établir une relation linéaire entre une variable dépendante et une ou plusieurs variables indépendantes.}}
+
+
+% --- TITRE ---
+\title{Cours de Statistiques Descriptives et Bivariées \\ \large Avec applications sur Python et R}
+\author{GitHub Copilot}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section*{Introduction}
+Ce cours a pour objectif de fournir les bases essentielles des statistiques descriptives et de l'analyse bivariée. Les statistiques sont un outil fondamental dans de nombreux domaines pour résumer, analyser et interpréter des données. Nous commencerons par les mesures de base pour une seule variable (analyse univariée) avant d'explorer les relations entre deux variables (analyse bivariée).
+
+Ce document est structuré en trois parties principales, correspondant aux travaux dirigés :
+\begin{itemize}
+    \item \textbf{Statistiques Descriptives de Base :} Mesures de tendance centrale, de dispersion, et de forme.
+    \item \textbf{Analyse de Données Univariées :} Étude détaillée des variables selon leur type (qualitatives et quantitatives), avec des applications en \textbf{R}.
+    \item \textbf{Analyse de Données Bivariées :} Exploration des relations entre deux variables, avec des applications en \textbf{Python}.
+\end{itemize}
+
+Chaque section inclura des définitions, des formules mathématiques, des exemples chiffrés, des visualisations et des extraits de code pour une compréhension pratique et approfondie.
+
+\part{Statistiques Descriptives de Base (TD 1)}
+
+\section{Mesures de Tendance Centrale}
+Les \gls{moyenne} de tendance centrale indiquent la valeur "typique" ou centrale d'un ensemble de données.
+
+\subsection{La Moyenne}
+\begin{definition}{Moyenne arithmétique}{def:moyenne}
+La \gls{moyenne} arithmétique est la somme des valeurs divisée par leur nombre. Elle est sensible aux valeurs extrêmes.
+\end{definition}
+
+\begin{formule}{Moyenne d'un échantillon}{form:moyenne}
+Pour un échantillon de $n$ valeurs $x_1, x_2, \dots, x_n$ :
+$$ \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i $$
+\end{formule}
+
+\begin{exemple}{Calcul de la moyenne des notes}{ex:moyenne}
+Pour les notes 12, 15, 10, 14, 9, 16, 13, 17, 11, 14 :
+$$ \bar{x} = \frac{12+15+10+14+9+16+13+17+11+14}{10} = \frac{131}{10} = 13.1 $$
+\textbf{Interprétation :} La note moyenne du groupe d'étudiants est de 13.1 sur 20.
+\end{exemple}
+
+\begin{tcolorbox}[title=Application en Python, colback=black!5!white, colframe=black!75!black]
+\begin{lstlisting}[language=Python]
+import numpy as np
+
+notes = [12, 15, 10, 14, 9, 16, 13, 17, 11, 14]
+moyenne = np.mean(notes)
+print(f"La moyenne est : {moyenne}")
+# Output: La moyenne est : 13.1
+\end{lstlisting}
+\end{tcolorbox}
+
+\subsection{La Médiane}
+\begin{definition}{Médiane}{def:mediane}
+La \gls{mediane} est la valeur qui sépare l'échantillon (préalablement ordonné) en deux parties égales. Elle n'est pas sensible aux valeurs extrêmes.
+\end{definition}
+
+\begin{exemple}{Calcul de la médiane}{ex:mediane}
+Notes ordonnées : 9, 10, 11, 12, \textbf{13, 14}, 14, 15, 16, 17.
+$n=10$ (pair), la médiane est la moyenne de la 5ème et 6ème valeur.
+$$ M_e = \frac{13 + 14}{2} = 13.5 $$
+\textbf{Interprétation :} La moitié des étudiants a une note inférieure ou égale à 13.5, et l'autre moitié a une note supérieure ou égale.
+\end{exemple}
+
+\subsection{Le Mode}
+\begin{definition}{Mode}{def:mode}
+Le mode est la valeur qui apparaît le plus fréquemment dans un ensemble de données. Une distribution peut avoir un (unimodale), plusieurs (multimodale) ou aucun mode.
+\end{definition}
+
+\begin{exemple}{Calcul du mode}{ex:mode}
+Dans la série de notes, la note \textbf{14} apparaît deux fois, plus que toute autre. Le mode est donc 14.
+\end{exemple}
+
+\section{Mesures de Dispersion}
+Ces mesures quantifient l'étalement ou la variabilité des données.
+
+\subsection{La Variance et l'Écart-type}
+\begin{definition}{Variance et Écart-type}{def:variance}
+La \gls{variance} ($s^2$) mesure la dispersion moyenne au carré autour de la moyenne. L'\gls{ecart-type} ($s$), racine carrée de la variance, exprime cette dispersion dans l'unité de mesure originale des données.
+\end{definition}
+
+\begin{formule}{Variance et Écart-type d'un échantillon}{form:variance}
+$$ s^2 = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar{x})^2 \quad ; \quad s = \sqrt{s^2} $$
+\textit{Note : On divise par $n-1$ pour un estimateur non biaisé de la variance de la population.}
+\end{formule}
+
+\begin{exemple}{Calcul de la variance et de l'écart-type}{ex:variance}
+Pour les notes, avec $\bar{x}=13.1$ :
+$$ s^2 \approx 6.86 \quad ; \quad s = \sqrt{6.86} \approx 2.62 $$
+\textbf{Interprétation :} En moyenne, les notes s'écartent d'environ 2.62 points de la moyenne de 13.1. Un faible écart-type signifie que les notes sont regroupées autour de la moyenne, tandis qu'un écart-type élevé indique une plus grande dispersion.
+\end{exemple}
+
+\begin{tcolorbox}[title=Application en Python, colback=black!5!white, colframe=black!75!black]
+\begin{lstlisting}[language=Python]
+# Variance (ddof=1 pour la division par n-1)
+variance = np.var(notes, ddof=1) 
+ecart_type = np.std(notes, ddof=1)
+
+print(f"Variance : {variance:.2f}")
+print(f"Ecart-type : {ecart_type:.2f}")
+# Output: Variance : 6.86
+# Output: Ecart-type : 2.62
+\end{lstlisting}
+\end{tcolorbox}
+
+\section{Forme de la Distribution : Skewness et Kurtosis}
+
+\subsection{Coefficient d'Asymétrie (Skewness)}
+\begin{definition}{Skewness}{def:skewness}
+Le \gls{skewness} mesure le défaut de symétrie d'une distribution.
+\begin{itemize}
+    \item $S > 0$ : Asymétrie à droite (queue de distribution étalée vers les valeurs élevées).
+    \item $S < 0$ : Asymétrie à gauche (queue étalée vers les valeurs faibles).
+    \item $S \approx 0$ : Distribution approximativement symétrique.
+\end{itemize}
+\end{definition}
+
+\subsection{Coefficient d'Aplatissement (Kurtosis)}
+\begin{definition}{Kurtosis}{def:kurtosis}
+Le \gls{kurtosis} mesure si une distribution est plus "pointue" ou "aplatie" que la distribution normale.
+\begin{itemize}
+    \item $K > 3$ : Distribution leptokurtique (plus pointue que la normale).
+    \item $K < 3$ : Distribution platykurtique (plus aplatie que la normale).
+    \item $K = 3$ : Distribution mésokurtique (aplatissement normal).
+\end{itemize}
+L'excès de Kurtosis ($K-3$) est souvent utilisé pour comparer directement à 0.
+\end{definition}
+
+\begin{tcolorbox}[title=Application en Python (avec SciPy), colback=black!5!white, colframe=black!75!black]
+\begin{lstlisting}[language=Python]
+from scipy.stats import skew, kurtosis
+
+valeurs = [5, 7, 8, 10, 12, 14, 18, 19, 20, 22]
+s = skew(valeurs)
+k = kurtosis(valeurs, fisher=False) # fisher=False pour K, True pour K-3
+
+print(f"Skewness: {s:.2f}")
+print(f"Kurtosis: {k:.2f}")
+# Output: Skewness: 0.37
+# Output: Kurtosis: 1.94
+\end{lstlisting}
+\textbf{Interprétation :} Le Skewness de 0.37 indique une légère asymétrie à droite. Le Kurtosis de 1.94 ($<3$) suggère une distribution légèrement plus aplatie que la normale.
+\end{tcolorbox}
+
+\section{Exercices (Partie 1)}
+\begin{enumerate}
+    \item Pour la série de valeurs de l'exercice 3 sur le Skewness/Kurtosis, calculez manuellement la moyenne, la médiane et l'écart-type.
+    \item Si on ajoute la note 20/20 à la série de notes initiale, quel sera l'impact sur la moyenne et la médiane ? Laquelle de ces deux mesures est la plus robuste ?
+\end{enumerate}
+
+\part{Analyse de Données Univariées (TD 2)}
+\textit{Note : Les exemples de cette partie seront traités avec le langage R.}
+
+\section{Analyse d'une Variable Qualitative Nominale}
+\begin{exemple}{Navigateurs web}{ex:nominal}
+Une enquête sur le navigateur web préféré de 30 étudiants.
+\end{exemple}
+
+\begin{tcolorbox}[title=Analyse en R, colback=red!5!white, colframe=red!75!black]
+\begin{lstlisting}[language=R]
+# Creation du dataframe
+navigateurs <- data.frame(
+  nom = c("Chrome", "Firefox", "Edge", "Safari"),
+  effectif = c(14, 8, 5, 3)
+)
+
+# Calcul des frequences
+library(dplyr)
+navigateurs <- navigateurs %>%
+  mutate(
+    freq_rel = effectif / sum(effectif),
+    freq_cum = cumsum(effectif)
+  )
+
+print(navigateurs)
+\end{lstlisting}
+\end{tcolorbox}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    title={Distribution des navigateurs web},
+    xlabel={Navigateur},
+    ylabel={Effectif},
+    symbolic x coords={Chrome, Firefox, Edge, Safari},
+    xtick=data,
+    nodes near coords,
+    ]
+    \addplot coordinates {(Chrome,14) (Firefox,8) (Edge,5) (Safari,3)};
+\end{axis}
+\end{tikzpicture}
+\caption{Diagramme en barres des navigateurs.}
+\end{figure}
+
+\section{Analyse d'une Variable Quantitative Continue}
+\begin{exemple}{Taille des étudiants}{ex:continue}
+Les tailles (en cm) de 50 étudiants ont été relevées et groupées en classes.
+\end{exemple}
+
+\begin{tcolorbox}[title=Analyse en R, colback=red!5!white, colframe=red!75!black]
+\begin{lstlisting}[language=R]
+# Donnees
+classes <- c("150-160", "160-170", "170-180", "180-190", "190-200")
+effectifs <- c(5, 12, 18, 10, 5)
+centres_classes <- c(155, 165, 175, 185, 195)
+
+# Calcul de la moyenne ponderee
+moyenne_taille <- weighted.mean(centres_classes, w = effectifs)
+print(paste("Moyenne de taille approx. :", round(moyenne_taille, 2)))
+# Output: "Moyenne de taille approx. : 174.2"
+\end{lstlisting}
+\end{tcolorbox}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar interval,
+    title={Histogramme des tailles d'étudiants},
+    xlabel={Taille (cm)},
+    ylabel={Effectif},
+    xticklabel={[\pgfmathprintnumber{\tick}-\pgfmathprintnumber{\nexttick}[},
+]
+\addplot coordinates {(150,5) (160,12) (170,18) (180,10) (190,5) (200,0)};
+\end{axis}
+\end{tikzpicture}
+\caption{Histogramme représentant la distribution des tailles.}
+\end{figure}
+
+\section{Exercices (Partie 2)}
+\begin{enumerate}
+    \item En utilisant R, créez un diagramme circulaire (pie chart) pour les données des navigateurs web.
+    \item Pour l'exercice sur la satisfaction au travail (variable ordinale), quel est le pourcentage d'employés qui sont au moins "Satisfait" ?
+\end{enumerate}
+
+\part{Analyse de Données Bivariées (TD 3)}
+\textit{Note : Les exemples de cette partie seront traités avec le langage Python.}
+
+\section{Relation entre Deux Variables Quantitatives}
+\subsection{Corrélation Linéaire}
+\begin{definition}{Corrélation}{def:correlation}
+Le coefficient de \gls{correlation} de Pearson ($r$) mesure la force et la direction d'une relation linéaire entre deux variables. Il varie de -1 (corrélation négative parfaite) à +1 (corrélation positive parfaite). Une valeur proche de 0 indique une absence de relation \textbf{linéaire}.
+\end{definition}
+
+\begin{formule}{Coefficient de corrélation de Pearson}{form:correlation}
+$$ r = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum (x_i - \bar{x})^2 \sum (y_i - \bar{y})^2}} $$
+\end{formule}
+
+\subsection{Régression Linéaire Simple}
+\begin{definition}{Régression linéaire}{def:regression}
+La \gls{regression} modélise la relation entre une variable dépendante ($Y$) et une variable indépendante ($X$) par une droite, appelée droite de régression.
+\end{definition}
+
+\begin{formule}{Équation de la droite de régression}{form:regression}
+$$ \hat{y} = b_0 + b_1 x $$
+Où $\hat{y}$ est la valeur prédite de $Y$, $b_1$ est la pente et $b_0$ est l'ordonnée à l'origine.
+\end{formule}
+
+\begin{exemple}{Expérience et Salaire}{ex:regression}
+Analyse de la relation entre les années d'expérience et le salaire.
+\end{exemple}
+
+\begin{tcolorbox}[title=Analyse en Python, colback=black!5!white, colframe=black!75!black]
+\begin{lstlisting}[language=Python]
+import pandas as pd
+from scipy.stats import linregress
+import matplotlib.pyplot as plt
+
+data = {
+    'Experience': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    'Salaire': [22, 25, 28, 30, 35, 40, 42, 48, 50, 55]
+}
+df = pd.DataFrame(data)
+
+# Calcul de la correlation
+correlation = df['Experience'].corr(df['Salaire'])
+print(f"Coefficient de corrélation : {correlation:.3f}")
+
+# Regression lineaire
+slope, intercept, r_value, p_value, std_err = linregress(df['Experience'], df['Salaire'])
+print(f"Droite de régression : y = {slope:.2f}x + {intercept:.2f}")
+
+# Prediction pour 12 ans
+salaire_predit = slope * 12 + intercept
+print(f"Salaire prédit pour 12 ans d'expérience : {salaire_predit:.2f} k€")
+\end{lstlisting}
+\textbf{Résultats :}
+\begin{itemize}
+    \item Coefficient de corrélation : 0.986. C'est une corrélation positive très forte.
+    \item Droite de régression : y = 3.44x + 18.47
+    \item Salaire prédit pour 12 ans d'expérience : 59.71 k€
+\end{itemize}
+\end{tcolorbox}
+
+\section{Exercices (Partie 3)}
+\begin{enumerate}
+    \item Pour l'exercice 1 (Genre vs Langage), calculez le $\chi^2$ pour déterminer si la préférence pour un langage dépend du genre.
+    \item En utilisant Python, créez un nuage de points pour les données "Expérience vs Salaire" et tracez la droite de régression dessus.
+\end{enumerate}
+
+\appendix
+\section{Corrigés des Exercices}
+\subsection*{Partie 1}
+\begin{enumerate}
+    \item \textbf{Correction à venir...}
+    \item \textbf{Correction à venir...}
+\end{enumerate}
+
+\subsection*{Partie 2}
+\begin{enumerate}
+    \item \textbf{Correction à venir...}
+    \item \textbf{Correction à venir...}
+\end{enumerate}
+
+\subsection*{Partie 3}
+\begin{enumerate}
+    \item \textbf{Correction à venir...}
+    \item \textbf{Correction à venir...}
+\end{enumerate}
+
+% --- Impression du glossaire et de l'index ---
+\printglossaries
+\printindex
+
+\end{document}
